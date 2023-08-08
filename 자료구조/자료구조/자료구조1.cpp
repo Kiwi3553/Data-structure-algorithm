@@ -93,7 +93,8 @@ int main()
 
 //큐 구현 
 
-#define MAX 5
+/*
+#define MAX 3
 
 typedef struct Queue {
 	int front; //앞 쪽 index
@@ -101,31 +102,29 @@ typedef struct Queue {
 	int data[MAX];
 } Queue;
 
-void init(Queue* q)
+void init(Queue* q)             //편의상 초기화를 0으로 
 {
-	q->front = q->rear = -1;
+	q->front = q->rear = -0;
 }
 
-int is_full(Queue *q){
-	if (q->rear == MAX - 1)
-		return 1;
-	return 0;
+int is_full(Queue *q){           //is full 공식 대입하기 
+	return (((q->rear) + 1) % MAX == q->front);  //큐가 가리키는 레어에 더하기 1을 한 후 그것을 나머지 연산자를 써서 자기 큐의 최대값으로 나눈 나머지값이 큐가 가리키는 front값과 같은지를 판단하여서 리턴을 한다
 }
 
 int is_empty(Queue *q){
-	if (q->front == q->rear)
-		return 1;
-	return 0;
+	return q->front == q->rear;        //같은곳을 향한다는건 비어있는것 
+
 }
 
 void enqueue(Queue* q, int item)
 {
-	if(is_full(q))
+	if(is_full(q))                     //full을 판단하는건 동일 
 	{
 		printf("Error Queue is full");
 		exit(1);
 	}
-	q->data[++(q->rear)] = item;
+	q->rear = (q->rear + 1) % MAX;     //큐가 가리키는 리어에 데이터를 삽입할곳의 인덱스를 알기위해서 아까봣던 공식을 써서 그 값을 리어에 담아줌
+	q->data[q->rear] = item;           //큐가 가리키는 데이터의 큐가 가리키는 리어에 아이탬을 대입 
 }
 
 int dequeue(Queue* q) {
@@ -134,7 +133,8 @@ int dequeue(Queue* q) {
 		printf("Error Queue is empty");
 		exit(1);
 	}
-	return q->data[++(q->front)];      ///////////
+	q->front = (q->front + 1) % MAX;   //프론트의 값 구하기 
+	return q->data[q->front];      //프론트 인덱스에 있는값을 리턴
 }
 
 int main()
@@ -144,14 +144,29 @@ int main()
 
 	enqueue(&q, 3);
 	enqueue(&q, 2);
-	enqueue(&q, 1);
+	enqueue(&q, 1);                 //이 부분 삭제(한칸 확보)
 
 	printf("%d\n", dequeue(&q));
 	printf("%d\n", dequeue(&q));
 	printf("%d\n", dequeue(&q));
 
-
+	enqueue(&q, 3);                      //
+	printf("%d", dequeue(&q));           //
 	return 0;
 }
+*/
 
 //원형큐 
+typedef struct queue
+{
+	int* arr;          //동적 메모리의 주소를 저장하는 포인터
+	int front;         //삭제위치(배열의 첨자=인덱스)
+	int rear;          //삽입위치(배열의 첨자)
+	int count;         //저장된 원소의 개수
+	int capacity;      //배열의 최대 용량 = 배열이 유동적으로 변하기때문에 용량이 계속 변하며,현재 용량이 곧 최대용량이다
+} queue;
+
+int main()
+{
+	
+}
